@@ -1,0 +1,100 @@
+# ==========================================================
+# Auteur      : Section ALL (adapté par CSR)
+# OS          : Ubuntu 24.04
+# Contenu     : Vagrantfile - VM avec Docker Engine (option: Docker Desktop)
+# Date        : 21.08.2025
+# Version     : 1.1
+# ==========================================================
+
+# Constantes :
+VM_BOX      = "pkr_ubuntu_2404"
+VM_HOSTNAME = "vm-docker-swarm-manager"
+VM_NAME     = "vm-docker-swarm-manager"
+VM_CPUS     = 2
+VM_MEMORY   = 4096
+
+# Basculer à true pour tenter Docker Desktop (nécessite KVM + Desktop dans la VM)
+INSTALL_DOCKER_DESKTOP = false
+
+Vagrant.configure("2") do |config|
+  config.vm.box = VM_BOX
+  config.vm.hostname = VM_HOSTNAME
+  config.vm.network "private_network", ip: "192.168.42.10"
+
+  # Provider VMware
+  config.vm.provider "vmware_desktop" do |vmware|
+    vmware.memory = VM_MEMORY
+    vmware.cpus   = VM_CPUS
+    vmware.gui    = false
+    vmware.allowlist_verified = true
+    vmware.vmx["displayName"] = VM_NAME
+
+    # (Optionnel) Favoriser la virtualisation imbriquée pour Desktop (si jamais activé)
+    vmware.vmx["vhv.enable"] = "TRUE"
+  end
+
+  # Provision: Docker Engine + post-install
+  config.vm.provision "shell", inline: <<'SHELL'
+set -euxo pipefail
+
+# --- Pré-requis ---
+sudo apt-get update -y
+sudo apt-get install -y ca-certificates curl gnupg apt-transport-https lsb-release
+
+# --- Dépôt officiel Docker pour Ubuntu 24.04 (Noble) ---
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+UBU_CODENAME="$(. /etc/os-release && echo "${VERSION_CODENAME}")"
+ARCH="$(dpkg --print-architecture)"
+echo "deb [arch=${ARCH} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu ${UBU_CODENAME} stable" \
+  | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+sudo apt-get update -y
+
+# --- Installer Docker Engine + plugins Compose/Buildx ---
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+# --- Activer et démarrer ---
+sudo systemctl enable --now docker
+
+# --- Autoriser 'lab' à utiliser docker sans sudo ---
+if id lab >/dev/null 2>&1; then
+  sudo groupadd -f docker
+  sudo usermod -aG docker lab
+  # Test immédiat dans la session root (la session 'lab' devra se reconnecter)
+  sudo -u lab sg docker -c 'docker version' || true
+fi
+
+SHELL
+
+  # Provision optionnel: Docker Desktop (Linux)
+  if INSTALL_DOCKER_DESKTOP
+    config.vm.provision "shell", privileged: true, inline: <<'SHELL'
+set -euxo pipefail
+
+# Dépendances usuelles (Desktop embarque sa VM QEMU/KVM)
+sudo apt-get update -y
+sudo apt-get install -y ca-certificates curl
+
+# Télécharger le paquet Desktop (amd64). URL "main" fournie par la doc Docker.
+# (Alternative: télécharger depuis la page de release si vous préférez figer une version)
+DD_DEB="/tmp/docker-desktop-amd64.deb"
+curl -fL https://desktop.docker.com/linux/main/amd64/docker-desktop-amd64.deb -o "${DD_DEB}"
+
+# Installer
+sudo apt-get install -y "${DD_DEB}" || sudo apt-get -f install -y
+sudo apt-get install -y "${DD_DEB}"
+
+# Donner accès à 'lab'
+if id lab >/dev/null 2>&1; then
+  sudo usermod -aG docker lab
+fi
+
+# Remarque: Docker Desktop nécessite un environnement graphique et KVM actif.
+# Lancement par l'utilisateur dans une session GUI:
+#   systemctl --user start docker-desktop
+SHELL
+  end
+end
