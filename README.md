@@ -8,7 +8,7 @@ docker swarm init --advertise-addr 192.168.42.10 #Ip du manager
 
 Sur les workers:
 ```bash
-docker swarm join --token [Votre Token]
+docker swarm join --token [Votre Token] [Ip du manager]:2377
 ```
 Vous devriez voir : 
 ```
