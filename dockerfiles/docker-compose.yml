@@ -1,0 +1,16 @@
+services:
+  mariadb:
+    image: mariadb:12.0.2
+    container_name: mariadb-swarm
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_wordpress
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mariadb_data:/var/lib/mysql
+
+volumes:
+  mariadb_data:
+
