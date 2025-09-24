@@ -64,3 +64,14 @@ Swarmpit is running on port :888
 
 Enjoy :)
 ```
+
+## Docker Images
+
+MariaDB: https://hub.docker.com/r/romaindenis/mariadb-swarm
+
+To pull the image directly
+```
+docker pull romaindenis/mariadb-swarm:1.0
+```
+
+
