@@ -1,0 +1,14 @@
+services:
+  nginx:
+    image: nginx:1.28.0-alpine
+    ports:
+      - "80:80"
+    networks:
+      - nginx-network
+  wordpress:
+    image: 6.8.2-fpm-alpine 
+    networks:
+      - nginx-network
+networks:
+  my-network:
+    external: true
