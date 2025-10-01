@@ -73,5 +73,7 @@ To pull the image directly
 ```
 docker pull romaindenis/mariadb-swarm:1.0
 ```
+Port:_3306_
+
 
 
