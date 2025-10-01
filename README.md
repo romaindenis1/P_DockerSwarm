@@ -15,11 +15,17 @@ Vous devriez voir :
 This node joined a swarm as a worker.
 ```
 
-
 Sur le manager, pour afficher les noeuds du swarm:
 ```bash
 docker node ls
 ```
+
+### Démarrage de la stack
+Sur le manager:
+```bash
+docker stack deploy -c stack.yml [Nom de la stack]
+```
+
 ## Swarmpit
 Sur le manager: 
 ```
