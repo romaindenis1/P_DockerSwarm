@@ -1,5 +1,5 @@
 # Stack name
-stack_name=wp
+stack_name=347
 
 # Wordpress
 # Trouver le nombre de répliques

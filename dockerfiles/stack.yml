@@ -36,7 +36,7 @@ services:
     build: 
       context: /nginx/
       dockerfile: Dockerfile
-    image: romaindenis/nginx-swarm
+    image: romaindenis/nginx-swarm:1.0
     container_name: nginx-swarm
     ports:
       - "80:80"
@@ -52,3 +52,4 @@ volumes:
 networks:
   front:
   back:
+    internal : true
