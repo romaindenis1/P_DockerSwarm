@@ -1,2 +1,2 @@
-FROM romaindenis/nginx-swarm:1.0
+FROM nginx/1.28-alpine
 COPY nginx.conf /etc/nginx/nginx.conf
