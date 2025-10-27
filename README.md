@@ -3,7 +3,7 @@
 ## Mise en place du swarm
 Sur le manager:
 ```bash
-docker swarm init --advertise-addr 192.168.42.10 #Ip du manager
+docker swarm init --advertise-addr [Ip du manager]
 ```
 
 Sur les workers:
