@@ -21,7 +21,7 @@ docker node ls
 ## Déploiement du stack
 Sur le manager:
 ```bash
-docker stack deploy -c stack.yml [Nom de la stack]
+docker stack deploy -c stack.yml [Nom du stack]
 ```
 ## Installation de SwarmPit
 Sur le manager: 
@@ -43,20 +43,20 @@ Si cela a fonctionné vous devriez voir:
 ```
 Swarmpit is running on port :888
 ```
-
-## Information
-
-MariaDB Port: 3306
-
-Nginx Port: 80 
-
-Wordpress Port: 8080 
-
-SwarmPit Port: 888
+# En cas d'erreures
+En cas de problemes de déploiement, vous pouvez utiliser cette commande pour suprrimer le stack
+```
+docker stack rm [Nom du stack]
+```
+En cas de problemes de volumes persistants, vous pouvez utiliser cette commande pour supprimer les volumes
+```
+docker volume rm [Nom du volume]
+```
 
 ## Schema
 
 Voici le schema reseau du Swarm
 
 ![Schema du projet](./schema/Reseau.png)
+
 
