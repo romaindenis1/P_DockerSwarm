@@ -14,7 +14,7 @@ Vous devriez voir :
 ```
 This node joined a swarm as a worker.
 ```
-Pour verfifer que les workers sont bien connetctés, nous pouvons exécuter la commande suivante 
+Pour verifier que les workers sont bien connectés, nous pouvons exécuter la commande suivante 
 sur le manager pour afficher les noeuds du swarm:
 ```bash
 docker node ls
@@ -55,11 +55,10 @@ En cas de problemes de volumes persistants, vous pouvez utiliser cette commande 
 ```
 docker volume rm [Nom du volume]
 ```
-
 ## Schema
 
-Voici le schema reseau du Swarm
+Voici le schéma reseau du Swarm
 
-![Schema du projet](./schema/Reseau.png)
+![Schéma du projet](./schema/Reseau.png)
 
 
