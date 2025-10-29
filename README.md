@@ -54,4 +54,9 @@ Wordpress Port: 8080
 
 SwarmPit Port: 888
 
+## Schema
+
+Voici le schema reseau du Swarm
+
+![Schema du projet](./schema/Reseau.png)
 
