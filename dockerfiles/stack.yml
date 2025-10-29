@@ -1,52 +1,50 @@
-version: '3.8'
-
 services:
   wordpress:
     image: wordpress:6.8.2-fpm-alpine
-    # No ports exposed here; NGINX will handle the proxying
     environment:
       WORDPRESS_DB_HOST: mariadb
       WORDPRESS_DB_USER: root
       WORDPRESS_DB_PASSWORD: root
       WORDPRESS_DB_NAME: db_wordpress
     volumes:
-      - wordpress-data:/var/www/html
-    networks:
-      - back
-      - front
-    restart: always
+      - wordpress-data:/var/www/html # Emplacement des fichiers wordpress
+    networks: # On expose pas de port car on passe par nginx
+      - back # Communication avec mariadb
+      - front # Communication avec nginx
+    depends_on:
+      - mariadb # Démarre aprés la db
 
   mariadb:
     image: mariadb:12.0.2
     ports:
-      - "3306:3306"  # Expose MySQL port for external access
+      - "3306:3306"
     environment:
       MYSQL_DATABASE: db_wordpress
       MYSQL_ROOT_PASSWORD: root
     volumes:
-      - ./mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - mariadb_data:/var/lib/mysql
+      - ./mariadb/init.sql:/docker-entrypoint-initdb.d/init.sql # Montage du script de création de la base
+      - mariadb-data:/var/lib/mysql # Stockage persistant des données
     networks:
-      - back
+      - back # Communication avec wordpress
 
   nginx:
     image: nginx:1.28-alpine
     ports:
-      - "80:80"  # Bind NGINX to port 80 on the host
+      - "80:80" # Port http par défaut
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - wordpress-data:/var/www/html  # Mount the same volume for NGINX access
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro # Montage du fichier de configuration
+      - wordpress-data:/var/www/html
     networks:
-      - front
+      - front # Communication avec wordpress
     depends_on:
-      - wordpress  # Ensure NGINX starts after WordPress
+      - wordpress # Démarre après wordpress
 
 volumes:
-  mariadb_data:
-  wordpress-data:
+  mariadb-data: # Volume pour mariadb
+  wordpress-data: # Volume pour wordpress
 
 networks:
   front:
   back:
-    internal: true
+    internal: true # Pas d'accès à internet
 
