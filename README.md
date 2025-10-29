@@ -1,11 +1,12 @@
 # DockerSwarm
-
 ## Mise en place du swarm
 Sur le manager:
+Pour créer le swarm, nous pouvons exécuter la commande suivante:
 ```bash
 docker swarm init --advertise-addr [Ip du manager]
 ```
-Sur les workers:
+Sur les workers
+Pour rejoindre le swarm crée par le manager, nous pouvons exécuter la commande suivante:
 ```bash
 docker swarm join --token [Votre Token] [Ip du manager]:2377
 ```
@@ -20,25 +21,27 @@ docker node ls
 ```
 ## Déploiement du stack
 Sur le manager:
+Pour deployer le stack, nous pouvons exécuter la commande suivante:
+Le flag -c est pour specifier ou est le fichier stack
+Par conséquent, vous devrez peut-être modifier le chemin d'accès en fonction de l'endroit où vous décidez d'exécuter la commande
 ```bash
 docker stack deploy -c stack.yml [Nom du stack]
 ```
 ## Installation de SwarmPit
-Sur le manager: 
+Sur le manager:
+Ceci lance un contenaire avec l'image officielle de swarmpit pour son installation
 ```
 docker run -it --rm \
   --name swarmpit-installer \
   --volume /var/run/docker.sock:/var/run/docker.sock \
 swarmpit/install:1.9
 ```
-
 Nous avons utilisé la configuration suivante:
 - Nom de la stack: swarmpit
 - Port de swarmpit: 888
 - Volume de la DB: local
 - Nom d'utilisateur admin: admin
 - Mot de passe admin: rootroot
-
 Si cela a fonctionné vous devriez voir:
 ```
 Swarmpit is running on port :888
