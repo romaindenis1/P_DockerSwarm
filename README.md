@@ -71,31 +71,14 @@ Swarmpit is running on port :888
 Enjoy :)
 ```
 
-## Docker Images
+## Information
 
-MariaDB: https://hub.docker.com/r/romaindenis/mariadb-swarm
+MariaDB Port: 3306
 
-To pull the image directly
-```
-docker pull romaindenis/mariadb-swarm:1.0
-```
-Port:_3306_
+Nginx Port: 80 
 
-Nginx: https://hub.docker.com/r/romaindenis/nginx-swarm
+Wordpress Port: 8080 
 
-To pull the image directly
-```
-docker pull romaindenis/nginx-swarm:1.0
-```
-Port:_80_
-
-Wordpress: https://hub.docker.com/_/wordpress (no custom image needed)
-
-To pull the image directly
-```
-docker pull wordpress:6.8.2-fpm-alpine
-```
-Port:_8080_
 
 
 
